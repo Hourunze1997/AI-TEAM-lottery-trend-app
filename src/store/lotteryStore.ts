@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { LotteryDraw } from '../models/types';
+import { DrawRecord } from '../types/models';
 import { fetchHistory, fetchLatest } from '../api/lottery';
 import { STORAGE_KEYS } from '../utils/constants';
 import { saveItem, loadItem } from '../services/storageService';
@@ -17,6 +18,22 @@ interface LotteryState {
 }
 
 const PAGE_SIZE = 20;
+
+/**
+ * DrawRecord (公开数据) → LotteryDraw (Store/UI 期望的形状)
+ * - period → code
+ * - drawDate → date
+ * - front/back 已经是 number[]
+ */
+function toLotteryDraw(d: DrawRecord): LotteryDraw {
+  return {
+    id: d.period,
+    code: d.period,
+    date: d.drawDate,
+    front: d.front,
+    back: d.back,
+  };
+}
 
 export const useLotteryStore = create<LotteryState>((set, get) => ({
   history: [],
@@ -41,8 +58,8 @@ export const useLotteryStore = create<LotteryState>((set, get) => ({
     try {
       const next = page + 1;
       const result = await fetchHistory(next, PAGE_SIZE);
-      const newList =
-        next === 1 ? result.list : [...get().history, ...result.list];
+      const mapped = result.list.map(toLotteryDraw);
+      const newList = next === 1 ? mapped : [...get().history, ...mapped];
       set({
         history: newList,
         loading: false,
@@ -58,8 +75,9 @@ export const useLotteryStore = create<LotteryState>((set, get) => ({
   loadLatest: async () => {
     const d = await fetchLatest();
     if (d) {
-      set({ latest: d });
-      await saveItem(STORAGE_KEYS.LASTEST, d);
+      const lot = toLotteryDraw(d);
+      set({ latest: lot });
+      await saveItem(STORAGE_KEYS.LASTEST, lot);
     }
   },
 

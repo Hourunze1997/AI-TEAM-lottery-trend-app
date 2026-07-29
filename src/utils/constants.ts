@@ -2,8 +2,12 @@
 export const FRONT_RANGE = { min: 1, max: 35, count: 5 } as const;
 export const BACK_RANGE = { min: 1, max: 12, count: 2 } as const;
 
-// API 地址占位，部署时替换
-export const API_BASE_URL = 'https://api.example.com';
+// 自建后端地址（占位，运行时由 Settings 配置覆盖）
+export const API_BASE_URL = '';
+
+// 公开数据源 URL（GitHub raw，来源 yangxb919/lottery-data）
+// 前区 1-35 选 5，后区 1-12 选 2：大乐透
+export const PUBLIC_DATA_URL = 'https://raw.githubusercontent.com/yangxb919/lottery-data/main/data/dlt.json';
 
 // 前区区间划分（1-35 分为 5 个区间）
 export const FRONT_ZONES: number[][] = [

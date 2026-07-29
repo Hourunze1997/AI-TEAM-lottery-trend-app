@@ -4,6 +4,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import RootNavigator from './src/navigation/RootNavigator';
 import { useLotteryStore } from './src/store/lotteryStore';
 import { useFavoriteStore } from './src/store/favoriteStore';
+import { initBaseURL } from './src/api/client';
 
 // 应用入口
 export default function App() {
@@ -14,6 +15,7 @@ export default function App() {
   useEffect(() => {
     // 初始化：恢复本地缓存 + 拉取最新
     (async () => {
+      await initBaseURL();
       await hydrate();
       await hydrateFav();
       await loadLatest();

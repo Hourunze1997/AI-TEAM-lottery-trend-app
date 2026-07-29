@@ -28,3 +28,11 @@ state.db
 
 # Logs
 *.log
+# Android build artifacts
+android/
+android-app/
+*.apk
+*.apk.sha256
+
+# Expo prebuild output
+ios/
