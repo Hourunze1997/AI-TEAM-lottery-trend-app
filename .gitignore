@@ -1,0 +1,30 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+*.db
+*.sqlite
+*.sqlite3
+
+# Node / RN / Expo
+node_modules/
+.expo/
+.expo-shared/
+dist/
+web-build/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Env
+.env
+.env.local
+
+# Build artifacts
+.scan-imports.js
+state.db
+
+# Logs
+*.log

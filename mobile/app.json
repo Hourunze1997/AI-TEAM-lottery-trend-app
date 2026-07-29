@@ -1,0 +1,24 @@
+{
+  "expo": {
+    "name": "Lotto Predictor",
+    "slug": "lotto-predictor",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "automatic",
+    "newArchEnabled": true,
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.example.lottopredictor"
+    },
+    "android": {
+      "package": "com.example.lottopredictor"
+    },
+    "plugins": [
+      "expo-secure-store",
+      "expo-notifications"
+    ],
+    "extra": {
+      "apiBaseUrl": "http://localhost:8000/api/v1"
+    }
+  }
+}
