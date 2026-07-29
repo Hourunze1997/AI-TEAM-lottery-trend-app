@@ -20,7 +20,6 @@
         "foregroundImage": "./assets/icon.png",
         "backgroundColor": "#ffffff"
       }
-    },
-    "plugins": ["expo-router"]
+    }
   }
 }
