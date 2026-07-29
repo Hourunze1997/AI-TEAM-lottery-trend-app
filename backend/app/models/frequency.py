@@ -21,7 +21,7 @@ class NumberFrequency(Base):
     detail: Mapped[dict | None] = mapped_column(JSON, nullable=True)
 
     updated_at: Mapped[datetime] = mapped_column(
-        DateTime, default=lambda: datetime.utcnow
+        DateTime, default=lambda: datetime.utcnow()
     )
 
     __table_args__ = (

@@ -12,9 +12,10 @@ def test_create_favorite(client, auth_header):
 
 
 def test_create_favorite_invalid(client, auth_header):
+    # 5+2 个号码过 schema，但前区全重复 → 触发 _validate_numbers 业务校验 (400)
     resp = client.post(
         "/api/v1/favorites",
-        json={"front_numbers": [1, 2, 3], "back_numbers": [1], "tag": "x"},
+        json={"front_numbers": [1, 1, 1, 1, 1], "back_numbers": [1, 2], "tag": "x"},
         headers=auth_header,
     )
     assert resp.status_code == 400

@@ -26,6 +26,6 @@ class UserNotification(Base):
     push_token_invalid: Mapped[bool] = mapped_column(Boolean, default=False)
 
     updated_at: Mapped[datetime] = mapped_column(
-        DateTime, default=lambda: datetime.utcnow,
-        onupdate=lambda: datetime.utcnow,
+        DateTime, default=lambda: datetime.utcnow(),
+        onupdate=lambda: datetime.utcnow(),
     )

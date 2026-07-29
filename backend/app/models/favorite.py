@@ -20,7 +20,7 @@ class Favorite(Base):
     best_rank: Mapped[str | None] = mapped_column(String(16), nullable=True)  # 一等奖/二等奖...
 
     created_at: Mapped[datetime] = mapped_column(
-        DateTime, default=lambda: datetime.utcnow
+        DateTime, default=lambda: datetime.utcnow()
     )
 
     __table_args__ = (
@@ -43,7 +43,7 @@ class FavoriteHit(Base):
     rank: Mapped[str | None] = mapped_column(String(16), nullable=True)
 
     created_at: Mapped[datetime] = mapped_column(
-        DateTime, default=lambda: datetime.utcnow
+        DateTime, default=lambda: datetime.utcnow()
     )
 
     __table_args__ = (

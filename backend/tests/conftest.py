@@ -5,6 +5,7 @@ import pytest
 from fastapi.testclient import TestClient
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
+from sqlalchemy.pool import StaticPool
 
 # 允许从 backend 目录运行
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
@@ -17,9 +18,28 @@ from app.main import app  # noqa: E402
 from app.security import create_access_token  # noqa: E402
 
 
+@pytest.fixture(autouse=True)
+def _disable_scheduler(monkeypatch):
+    """FastAPI lifespan 会 await start_scheduler()，里面 retry_missed_draws()
+    会查 Draw 表；测试用 :memory: 时 SessionLocal() 拿不到 conftest 创建的
+    表，会抛 no such table。把 scheduler 关掉避免启动期跑后台 job。
+    """
+    import app.jobs.scheduler as sched
+    async def _noop():
+        return None
+    monkeypatch.setattr(sched, "start_scheduler", _noop)
+    monkeypatch.setattr(sched, "shutdown_scheduler", _noop)
+
+
 @pytest.fixture(scope="function")
 def db_engine():
-    engine = create_engine("sqlite:///:memory:", connect_args={"check_same_thread": False})
+    # StaticPool + check_same_thread=False 让所有 Session 共享同一个 :memory: 连接，
+    # 否则 conftest 这边 create_all 建好的表，scheduler / SessionLocal 看不到。
+    engine = create_engine(
+        "sqlite:///:memory:",
+        connect_args={"check_same_thread": False},
+        poolclass=StaticPool,
+    )
     Base.metadata.create_all(engine)
     yield engine
     Base.metadata.drop_all(engine)
