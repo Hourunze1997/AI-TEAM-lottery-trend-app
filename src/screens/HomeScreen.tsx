@@ -31,11 +31,12 @@ export default function HomeScreen({ navigation }: any) {
     setRefreshing(false);
   };
 
+  // Tab 名称严格匹配 RootNavigator 中的 PascalCase
   const cards = [
-    { key: 'history', label: '历史开奖', sub: '全部期次' },
-    { key: 'trend', label: '走势分析', sub: '冷热/遗漏' },
-    { key: 'recommend', label: '智能推荐', sub: '多维算法' },
-    { key: 'favorite', label: '我的收藏', sub: `${favorites.length} 组` },
+    { key: 'History', label: '历史开奖', sub: '全部期次' },
+    { key: 'Trend', label: '走势分析', sub: '冷热/遗漏' },
+    { key: 'Recommend', label: '智能推荐', sub: '多维算法' },
+    { key: 'Favorite', label: '我的收藏', sub: `${favorites.length} 组` },
   ];
 
   return (

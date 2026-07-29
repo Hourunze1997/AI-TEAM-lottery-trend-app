@@ -65,9 +65,9 @@ function pickBalanced(
   weights: Weights,
   zones: number[][]
 ): NumberStat[] {
-  // 按分数排序
+  // 打分 + 微随机扰动（避免分数都接近时每次都取同一组）
   const scored = stats
-    .map((s) => ({ s, score: scoreNumber(s, weights) }))
+    .map((s) => ({ s, score: scoreNumber(s, weights) + (Math.random() - 0.5) * 0.05 }))
     .sort((a, b) => b.score - a.score);
 
   // 每个区间至少保证一定占比

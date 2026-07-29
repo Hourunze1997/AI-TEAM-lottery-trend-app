@@ -16,6 +16,28 @@ import StatCard from '../components/StatCard';
 import { colors } from '../theme/colors';
 import { uuid } from '../utils/helpers';
 import { RecommendSet } from '../models/types';
+import { FRONT_RANGE, BACK_RANGE } from '../utils/constants';
+
+// 兜底：纯随机（当历史为空时也能给一组号码）
+function generateRandomFallback(): RecommendSet {
+  const pickN = (min: number, max: number, n: number): number[] => {
+    const pool = Array.from({ length: max - min + 1 }, (_, i) => min + i);
+    const out: number[] = [];
+    for (let i = 0; i < n; i++) {
+      const idx = Math.floor(Math.random() * pool.length);
+      out.push(pool.splice(idx, 1)[0]);
+    }
+    return out.sort((a, b) => a - b);
+  };
+  return {
+    id: uuid(),
+    front: pickN(FRONT_RANGE.min, FRONT_RANGE.max, FRONT_RANGE.count),
+    back: pickN(BACK_RANGE.min, BACK_RANGE.max, BACK_RANGE.count),
+    score: 0.5,
+    createdAt: Date.now(),
+    reason: '随机生成 (历史数据为空)',
+  };
+}
 
 // 智能推荐页
 export default function RecommendScreen() {
@@ -26,12 +48,23 @@ export default function RecommendScreen() {
   const statList = useMemo(() => buildStatList(history), [history]);
 
   const regenerate = () => {
-    if (statList.length === 0) {
-      Alert.alert('提示', '暂无历史数据，请稍后再试');
-      return;
+    try {
+      if (statList.length === 0) {
+        // 兜底：直接随机
+        setCurrent(generateRandomFallback());
+        return;
+      }
+      const r = generateRecommend(statList, 5);
+      // 防御：如果返回的 front/back 为空也走兜底
+      if (!r.front?.length || !r.back?.length) {
+        setCurrent(generateRandomFallback());
+        return;
+      }
+      setCurrent(r);
+    } catch (e: any) {
+      console.warn('[regenerate]', e);
+      setCurrent(generateRandomFallback());
     }
-    const r = generateRecommend(statList, 5);
-    setCurrent(r);
   };
 
   const saveFavorite = async () => {
