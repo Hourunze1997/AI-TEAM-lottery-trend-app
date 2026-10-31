@@ -6,9 +6,16 @@ import { DrawRecord } from '../types/models';
 import { saveItem, loadItem } from './storageService';
 
 // 公开 JSON 数据源
-// raw.githubusercontent.com 直连，GitHub 公开资源
+// raw.githubusercontent.com 直连，GitHub 公开资源；国内直连不稳，
+// 依次尝试下面的候选列表（镜像仅做 URL 前缀代理，内容与 raw 一致），
+// meta.url 记录实际成功的那一个。
 export const PUBLIC_LOTTERY_DATA_URL =
   'https://raw.githubusercontent.com/yangxb919/lottery-data/main/data/dlt.json';
+
+const REMOTE_URL_CANDIDATES = [
+  PUBLIC_LOTTERY_DATA_URL,
+  `https://ghfast.top/${PUBLIC_LOTTERY_DATA_URL}`,
+];
 
 // AsyncStorage 缓存键
 const CACHE_KEY = '@lottery/dlt_cache_v1';
@@ -57,16 +64,16 @@ export function mapDraw(raw: RawDraw): DrawRecord {
 export async function loadAllDraws(
   maxCount = 200,
 ): Promise<{ items: DrawRecord[]; meta: DataSourceMeta }> {
-  // 1. 尝试 GitHub raw
+  // 1. 尝试 GitHub raw（含镜像回退）
   try {
-    const items = await fetchRemote(maxCount);
+    const { items, url } = await fetchRemote(maxCount);
     if (items.length) {
       await saveItem(CACHE_KEY, items);
       await saveItem(CACHE_META_KEY, {
         source: 'remote',
         fetchedAt: new Date().toISOString(),
         count: items.length,
-        url: PUBLIC_LOTTERY_DATA_URL,
+        url,
       });
       return {
         items,
@@ -74,7 +81,7 @@ export async function loadAllDraws(
           source: 'remote',
           fetchedAt: new Date().toISOString(),
           count: items.length,
-          url: PUBLIC_LOTTERY_DATA_URL,
+          url,
         },
       };
     }
@@ -117,14 +124,14 @@ export async function loadAllDraws(
 export async function refreshFromRemote(
   maxCount = 200,
 ): Promise<{ items: DrawRecord[]; meta: DataSourceMeta }> {
-  const items = await fetchRemote(maxCount);
+  const { items, url } = await fetchRemote(maxCount);
   if (!items.length) throw new Error('远端返回空数据');
   await saveItem(CACHE_KEY, items);
   await saveItem(CACHE_META_KEY, {
     source: 'remote',
     fetchedAt: new Date().toISOString(),
     count: items.length,
-    url: PUBLIC_LOTTERY_DATA_URL,
+    url,
   });
   return {
     items,
@@ -132,7 +139,7 @@ export async function refreshFromRemote(
       source: 'remote',
       fetchedAt: new Date().toISOString(),
       count: items.length,
-      url: PUBLIC_LOTTERY_DATA_URL,
+      url,
     },
   };
 }
@@ -143,12 +150,24 @@ export async function getCachedMeta(): Promise<DataSourceMeta | null> {
 
 /* ---------- 内部 ---------- */
 
-async function fetchRemote(maxCount: number): Promise<DrawRecord[]> {
-  const resp = await axios.get<RawDraw[]>(PUBLIC_LOTTERY_DATA_URL, {
-    timeout: 15000,
-  });
-  const arr = Array.isArray(resp.data) ? resp.data : [];
-  return arr.slice(0, maxCount).map(mapDraw);
+async function fetchRemote(
+  maxCount: number,
+): Promise<{ items: DrawRecord[]; url: string }> {
+  let lastErr: unknown = null;
+  for (const url of REMOTE_URL_CANDIDATES) {
+    try {
+      const resp = await axios.get<RawDraw[]>(url, { timeout: 15000 });
+      const arr = Array.isArray(resp.data) ? resp.data : [];
+      if (arr.length) {
+        return { items: arr.slice(0, maxCount).map(mapDraw), url };
+      }
+    } catch (e) {
+      lastErr = e;
+      console.warn('[publicData] candidate failed', url, e);
+    }
+  }
+  if (lastErr) throw lastErr;
+  return { items: [], url: REMOTE_URL_CANDIDATES[0] };
 }
 
 async function loadBundledSeed(maxCount: number): Promise<DrawRecord[]> {

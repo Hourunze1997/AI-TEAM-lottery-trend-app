@@ -12,7 +12,7 @@ export function FavoritesScreen() {
   if (favorites.length === 0) {
     return (
       <View style={styles.container}>
-        <EmptyState title="还没有收藏" hint="去推荐页收藏一组号码吧" />
+        <EmptyState title="还没有收藏" hint="去选号页收藏一组号码吧" />
       </View>
     );
   }

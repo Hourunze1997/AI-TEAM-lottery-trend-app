@@ -19,15 +19,6 @@ export interface NumberStat {
   zoneIndex: number;   // 所属区间索引
 }
 
-export interface RecommendSet {
-  id: string;
-  front: number[];
-  back: number[];
-  score: number;
-  createdAt: number;
-  reason?: string;
-}
-
 export interface FavoriteSet {
   id: string;
   front: number[];
@@ -35,12 +26,6 @@ export interface FavoriteSet {
   notify: boolean;
   createdAt: number;
   remark?: string;
-}
-
-export interface Weights {
-  frequency: number;
-  missing: number;
-  zoneBalance: number;
 }
 
 export interface PageResult<T> {

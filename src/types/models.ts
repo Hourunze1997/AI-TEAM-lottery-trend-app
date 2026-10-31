@@ -20,17 +20,6 @@ export interface NumberStat {
   rank: number;            // 排名
 }
 
-export type AlgorithmKey = 'frequency' | 'miss' | 'weighted' | 'hybrid';
-
-export interface Recommendation {
-  algorithm: AlgorithmKey;
-  front: number[];         // 5 个前区号
-  back: number[];          // 2 个后区号
-  confidence: number;      // 0-100
-  reason: string;          // 推荐理由
-  generatedAt: string;
-}
-
 export interface MatchResult {
   period: string;
   drawDate: string;

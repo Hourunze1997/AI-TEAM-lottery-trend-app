@@ -62,7 +62,7 @@ export default function FavoriteScreen() {
           favorites.length === 0 ? styles.emptyContent : styles.content
         }
         ListEmptyComponent={
-          <EmptyState title="还没有收藏" hint="在推荐页收藏一组号码吧" />
+          <EmptyState title="还没有收藏" hint="在选号页收藏一组号码吧" />
         }
       />
     </View>

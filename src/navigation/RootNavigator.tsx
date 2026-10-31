@@ -5,7 +5,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import HomeScreen from '../screens/HomeScreen';
 import HistoryScreen from '../screens/HistoryScreen';
 import TrendScreen from '../screens/TrendScreen';
-import RecommendScreen from '../screens/RecommendScreen';
+import PickerScreen from '../screens/PickerScreen';
 import FavoriteScreen from '../screens/FavoriteScreen';
 import { SettingsScreen } from '../screens/SettingsScreen';
 import { colors } from '../theme/colors';
@@ -17,7 +17,7 @@ const tabIcons: Record<string, string> = {
   Home: '🏠',
   History: '📜',
   Trend: '📈',
-  Recommend: '🎯',
+  Picker: '🎲',
   Favorite: '⭐',
   Settings: '⚙️',
 };
@@ -44,7 +44,7 @@ export default function RootNavigator() {
         <Tab.Screen name="Home" component={HomeScreen} options={{ title: '首页' }} />
         <Tab.Screen name="History" component={HistoryScreen} options={{ title: '历史' }} />
         <Tab.Screen name="Trend" component={TrendScreen} options={{ title: '走势' }} />
-        <Tab.Screen name="Recommend" component={RecommendScreen} options={{ title: '推荐' }} />
+        <Tab.Screen name="Picker" component={PickerScreen} options={{ title: '选号' }} />
         <Tab.Screen name="Favorite" component={FavoriteScreen} options={{ title: '收藏' }} />
         <Tab.Screen name="Settings" component={SettingsScreen} options={{ title: '设置' }} />
       </Tab.Navigator>

@@ -35,7 +35,7 @@ export default function HomeScreen({ navigation }: any) {
   const cards = [
     { key: 'History', label: '历史开奖', sub: '全部期次' },
     { key: 'Trend', label: '走势分析', sub: '冷热/遗漏' },
-    { key: 'Recommend', label: '智能推荐', sub: '多维算法' },
+    { key: 'Picker', label: '随机选号', sub: '纯随机·观感规则' },
     { key: 'Favorite', label: '我的收藏', sub: `${favorites.length} 组` },
   ];
 

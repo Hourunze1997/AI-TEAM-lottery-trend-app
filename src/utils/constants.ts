@@ -24,13 +24,6 @@ export const BACK_ZONES: number[][] = [
   [9, 12],
 ];
 
-// 推荐权重
-export const DEFAULT_WEIGHTS = {
-  frequency: 0.4,
-  missing: 0.4,
-  zoneBalance: 0.2,
-};
-
 // 存储 key
 export const STORAGE_KEYS = {
   HISTORY: '@lottery/history',
