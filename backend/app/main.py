@@ -14,7 +14,7 @@ from app.errors import (
 from app.routers import (
     draws,
     frequencies,
-    predictions,
+    picker,
     favorites,
     notifications,
     auth,
@@ -41,7 +41,7 @@ def create_app() -> FastAPI:
             logger.info("应用关闭")
 
     app = FastAPI(
-        title="Lotto Predictor API",
+        title="Lotto Picker API",
         version="1.0.0",
         lifespan=lifespan,
     )
@@ -66,7 +66,7 @@ def create_app() -> FastAPI:
     app.include_router(auth.router, prefix="/api/v1/auth", tags=["auth"])
     app.include_router(draws.router, prefix="/api/v1/draws", tags=["draws"])
     app.include_router(frequencies.router, prefix="/api/v1/frequencies", tags=["frequencies"])
-    app.include_router(predictions.router, prefix="/api/v1/predictions", tags=["predictions"])
+    app.include_router(picker.router, prefix="/api/v1/picker", tags=["picker"])
     app.include_router(favorites.router, prefix="/api/v1/favorites", tags=["favorites"])
     app.include_router(notifications.router, prefix="/api/v1/notifications", tags=["notifications"])
 

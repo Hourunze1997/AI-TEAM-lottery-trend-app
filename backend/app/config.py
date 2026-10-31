@@ -41,7 +41,7 @@ class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 
     # 基础
-    APP_NAME: str = "lotto-predictor"
+    APP_NAME: str = "lotto-picker"
     LOG_LEVEL: str = "INFO"
     ENV: str = "development"
     CORS_ORIGINS: List[str] = ["*"]

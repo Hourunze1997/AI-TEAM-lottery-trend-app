@@ -9,7 +9,6 @@ from app.models.draw import Draw
 from app.services.crawler import crawl_latest_draw
 from app.services.hit_checker import (
     check_favorite_hits,
-    check_prediction_hits,
     notify_hits,
 )
 from app.services.analyzer import rebuild_frequencies
@@ -84,7 +83,6 @@ async def job_check_hit_and_push() -> None:
             logger.warning("无最新开奖，跳过命中比对")
             return
         fav_hits = check_favorite_hits(db, latest)
-        _ = check_prediction_hits(db, latest)
         if fav_hits:
             await notify_hits(db, fav_hits)
     finally:

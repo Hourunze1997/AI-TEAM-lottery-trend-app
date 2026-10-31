@@ -4,7 +4,6 @@ from sqlalchemy.orm import Session
 
 from app.models.draw import Draw
 from app.models.favorite import Favorite
-from app.models.prediction import Prediction
 
 
 def build_highlight_set(
@@ -16,8 +15,6 @@ def build_highlight_set(
     """根据 mode 构造高亮号码集合"""
     if mode == "favorites":
         return _from_favorites(user_id, db)
-    if mode == "prediction":
-        return _from_predictions(user_id, target_period, db)
     if mode == "latest":
         return _from_latest(db)
     return set()
@@ -31,20 +28,6 @@ def _from_favorites(user_id: int, db: Optional[Session]) -> Set[int]:
     for f in favs:
         out.update(f.front_numbers or [])
         out.update(f.back_numbers or [])
-    return out
-
-
-def _from_predictions(user_id: int, target_period: str, db: Optional[Session]) -> Set[int]:
-    if not db:
-        return set()
-    preds = db.query(Prediction).filter(
-        Prediction.user_id == user_id,
-        Prediction.target_period == target_period,
-    ).all()
-    out: Set[int] = set()
-    for p in preds:
-        out.update(p.front_numbers or [])
-        out.update(p.back_numbers or [])
     return out
 
 

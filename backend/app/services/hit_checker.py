@@ -6,7 +6,6 @@ from sqlalchemy.orm import Session
 from app.models.draw import Draw
 from app.models.favorite import Favorite, FavoriteHit
 from app.models.notification import UserNotification
-from app.models.prediction import Prediction
 from app.services.push_service import send_push
 
 logger = logging.getLogger(__name__)
@@ -71,30 +70,6 @@ def check_favorite_hits(db: Session, draw: Draw) -> List[Dict]:
                 "front_hit": front_hit,
                 "back_hit": back_hit,
             })
-    db.commit()
-    return results
-
-
-def check_prediction_hits(db: Session, draw: Draw) -> List[Dict]:
-    """对 prediction 审计记录计算命中（仅标记，不外发）"""
-    results = []
-    preds = db.query(Prediction).filter(Prediction.target_period == draw.period).all()
-    for p in preds:
-        front_hit = len(set(p.front_numbers) & set(draw.front_numbers))
-        back_hit = len(set(p.back_numbers) & set(draw.back_numbers))
-        rank = _rank(front_hit, back_hit)
-        if p.payload is None:
-            p.payload = {}
-        p.payload["hit"] = {
-            "front_hit": front_hit,
-            "back_hit": back_hit,
-            "rank": rank,
-        }
-        results.append({
-            "user_id": p.user_id,
-            "algorithm": p.algorithm,
-            "rank": rank,
-        })
     db.commit()
     return results
 
