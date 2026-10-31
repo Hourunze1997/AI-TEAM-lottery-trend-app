@@ -3,15 +3,16 @@ import { View, Text, ScrollView, RefreshControl, StyleSheet } from 'react-native
 
 import StateView from './components/StateView';
 import DrawBall from './components/DrawBall';
-import PredictionCard from './components/PredictionCard';
+import TicketCard from './components/TicketCard';
 import { useRefresh } from '../hooks/useRefresh';
 import { fetchDraws } from '../api/draws';
-import { fetchPredictions } from '../api/predictions';
-import type { DrawListItem, PredictionListOut } from '../api/predictions';
+import { fetchTickets } from '../api/picker';
+import type { DrawListItem } from '../api/draws';
+import type { TicketOut } from '../api/picker';
 
 export default function HomeScreen() {
   const [latest, setLatest] = useState<DrawListItem | null>(null);
-  const [predictions, setPredictions] = useState<PredictionListOut | null>(null);
+  const [tickets, setTickets] = useState<TicketOut[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -21,10 +22,10 @@ export default function HomeScreen() {
       setLoading(true);
       const [d, p] = await Promise.all([
         fetchDraws({ page: 1, page_size: 1 }),
-        fetchPredictions('next'),
+        fetchTickets({ count: 2 }),
       ]);
       setLatest(d.items[0] ?? null);
-      setPredictions(p);
+      setTickets(p.tickets);
     } catch (e: any) {
       setError(e?.message ?? '加载失败');
     } finally {
@@ -67,9 +68,15 @@ export default function HomeScreen() {
         ))}
       </View>
 
-      <Text style={[styles.title, { marginTop: 24 }]}>下期推荐</Text>
-      {predictions?.predictions?.map((p) => (
-        <PredictionCard key={p.algorithm} prediction={p} highlight={highlightSet} />
+      <Text style={[styles.title, { marginTop: 24 }]}>随机选号</Text>
+      <Text style={styles.pickHint}>随机生成，不构成任何推荐；开奖完全随机。</Text>
+      {tickets.map((t, i) => (
+        <TicketCard
+          key={`${i}-${t.front_numbers.join('-')}-${t.back_numbers.join('-')}`}
+          index={i + 1}
+          ticket={t}
+          highlight={highlightSet}
+        />
       ))}
 
       <Text style={styles.disclaimer}>本站数据仅供参考，不构成投注建议。</Text>
@@ -82,6 +89,7 @@ const styles = StyleSheet.create({
   title: { fontSize: 18, fontWeight: '600', marginBottom: 4 },
   period: { fontSize: 14, color: '#666', marginBottom: 12 },
   label: { fontSize: 14, color: '#444', marginTop: 4, marginBottom: 6 },
+  pickHint: { fontSize: 12, color: '#888', marginBottom: 8 },
   row: { flexDirection: 'row', flexWrap: 'wrap' },
   disclaimer: { fontSize: 12, color: '#999', textAlign: 'center', marginTop: 24 },
 });

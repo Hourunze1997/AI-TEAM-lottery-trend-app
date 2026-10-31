@@ -27,7 +27,7 @@ export async function fetchDraws(params: {
   page?: number;
   page_size?: number;
   keyword?: string;
-  highlight?: 'favorites' | 'prediction' | 'latest';
+  highlight?: 'favorites' | 'latest';
   user_id?: number;
 }): Promise<DrawListResponse> {
   const res = await apiClient.get('/draws', { params });
@@ -36,7 +36,7 @@ export async function fetchDraws(params: {
 
 export async function fetchDrawByPeriod(
   period: string,
-  params: { highlight?: 'favorites' | 'prediction' | 'latest'; user_id?: number } = {},
+  params: { highlight?: 'favorites' | 'latest'; user_id?: number } = {},
 ): Promise<DrawOut> {
   const res = await apiClient.get(`/draws/${encodeURIComponent(period)}`, { params });
   return res.data;

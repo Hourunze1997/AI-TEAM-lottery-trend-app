@@ -17,7 +17,7 @@ import { useRefresh } from '../hooks/useRefresh';
 import { fetchDraws, fetchDrawByPeriod } from '../api/draws';
 import type { DrawListItem, DrawOut } from '../api/draws';
 
-type HighlightMode = 'favorites' | 'prediction' | 'latest';
+type HighlightMode = 'favorites' | 'latest';
 
 export default function HistoryScreen() {
   const [keyword, setKeyword] = useState('');

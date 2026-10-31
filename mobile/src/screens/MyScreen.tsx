@@ -175,7 +175,7 @@ export default function MyScreen() {
             }} hideActions />
           ))}
           <Text style={styles.disclaimer}>
-            本站所有推荐仅供数据分析参考，不构成任何投注建议；彩票具有偶然性，请理性看待。
+            本站随机选号仅供娱乐参考，不构成任何投注建议；开奖完全随机，选号方式不影响中奖概率，请理性看待。
           </Text>
         </View>
       }

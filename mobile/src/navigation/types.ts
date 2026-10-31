@@ -2,7 +2,7 @@ export type MainTabParamList = {
   Home: undefined;
   History: undefined;
   Trend: undefined;
-  Prediction: undefined;
+  Picker: undefined;
   My: undefined;
 };
 

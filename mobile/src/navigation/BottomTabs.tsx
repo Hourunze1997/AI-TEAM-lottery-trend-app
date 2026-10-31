@@ -5,7 +5,7 @@ import { Text } from 'react-native';
 import HomeScreen from '../screens/HomeScreen';
 import HistoryScreen from '../screens/HistoryScreen';
 import TrendScreen from '../screens/TrendScreen';
-import PredictionScreen from '../screens/PredictionScreen';
+import PickerScreen from '../screens/PickerScreen';
 import MyScreen from '../screens/MyScreen';
 import type { MainTabParamList } from './types';
 
@@ -36,9 +36,9 @@ export default function BottomTabs() {
         options={{ title: '走势', tabBarIcon: tabIcon('📈') }}
       />
       <Tab.Screen
-        name="Prediction"
-        component={PredictionScreen}
-        options={{ title: '预测', tabBarIcon: tabIcon('🔮') }}
+        name="Picker"
+        component={PickerScreen}
+        options={{ title: '选号', tabBarIcon: tabIcon('🎲') }}
       />
       <Tab.Screen
         name="My"

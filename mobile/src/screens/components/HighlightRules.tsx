@@ -2,13 +2,12 @@ import React from 'react';
 import { View, Text, Pressable, StyleSheet } from 'react-native';
 
 interface Props {
-  mode?: 'favorites' | 'prediction' | 'latest';
-  onChange?: (mode: 'favorites' | 'prediction' | 'latest') => void;
+  mode?: 'favorites' | 'latest';
+  onChange?: (mode: 'favorites' | 'latest') => void;
 }
 
-const RULES: { key: 'favorites' | 'prediction' | 'latest'; label: string; color: string }[] = [
+const RULES: { key: 'favorites' | 'latest'; label: string; color: string }[] = [
   { key: 'favorites', label: '对比收藏', color: '#ffcc00' },
-  { key: 'prediction', label: '对比推荐', color: '#2ecc71' },
   { key: 'latest', label: '对比最近一期', color: '#3498db' },
 ];
 
