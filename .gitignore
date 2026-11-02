@@ -12,7 +12,7 @@ __pycache__/
 node_modules/
 .expo/
 .expo-shared/
-dist/
+dist/*
 web-build/
 
 # OS
@@ -34,6 +34,8 @@ android/
 android-app/
 *.apk
 *.apk.sha256
+# 交付例外：APK 收纳进 dist/ 随仓库交付（团队 collect_apk 惯例）
+!dist/*.apk
 
 # Expo prebuild output
 ios/
