@@ -14,6 +14,9 @@ export const PUBLIC_LOTTERY_DATA_URL =
 
 const REMOTE_URL_CANDIDATES = [
   PUBLIC_LOTTERY_DATA_URL,
+  // jsdelivr CDN（国内可达性最好）；@main 固定跟主分支
+  'https://cdn.jsdelivr.net/gh/yangxb919/lottery-data@main/data/dlt.json',
+  'https://fastly.jsdelivr.net/gh/yangxb919/lottery-data@main/data/dlt.json',
   `https://ghfast.top/${PUBLIC_LOTTERY_DATA_URL}`,
 ];
 
